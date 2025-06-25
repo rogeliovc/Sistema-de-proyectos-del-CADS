@@ -15,4 +15,4 @@
 1. Clona el repositorio:
    ```bash
    git clone [https://github.com/tu-usuario/Sistema-de-proyectos-del-CADS.git](https://github.com/tu-usuario/Sistema-de-proyectos-del-CADS.git)
-   cd Sistema-de-proyectos-del-CADSplatform
+   cd Sistema-de-proyectos-del-CADS
