@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: sistema-proyectos-cads
+  
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cads_db
+    username: postgres
+    password: yourpassword
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+# Server Configuration
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# JWT Configuration
+jwt:
+  secret: cadsSecretKey2023!@#
+  expiration-ms: 86400000  # 24 hours
+  refresh-expiration-ms: 604800000  # 7 days
+
+# Logging
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    com.cads: DEBUG
+  file:
+    name: logs/application.log
+
+# OpenAPI (Swagger) Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
