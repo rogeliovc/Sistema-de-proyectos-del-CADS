@@ -44,6 +44,8 @@ const FormTitle = styled(Typography)({
   fontSize: '1.5rem',
 });
 
+import axios from 'axios';
+
 const HomePage = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -69,28 +71,34 @@ const HomePage = ({ onLoginSuccess }) => {
   }, [location.state]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    
-    try {
-      // Simulando una llamada a la API
-      // En una implementación real, reemplazar con una llamada real al backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Validación básica para propósitos de demostración
-      if (email && password) {
-        onLoginSuccess();
-      } else {
-        setError('Por favor ingresa tu correo electrónico y contraseña');
-      }
-    } catch (err) {
-      setError('Error al iniciar sesión. Por favor, inténtalo de nuevo.');
-      console.error('Error en inicio de sesión:', err);
-    } finally {
-      setLoading(false);
+  e.preventDefault();
+  setLoading(true);
+  setError('');
+
+  try {
+    const response = await axios.post('http://localhost:8080/api/auth/login', {
+      email,
+      password,
+    });
+
+    if (response.data && response.data.token) {
+      // Guarda el token en localStorage
+      localStorage.setItem('token', response.data.token);
+      onLoginSuccess(); // Puedes pasar el token si lo necesitas globalmente
+    } else {
+      setError('Respuesta inválida del servidor');
     }
-  };
+  } catch (err) {
+    if (err.response && err.response.data) {
+      setError(typeof err.response.data === 'string' ? err.response.data : 'Error de autenticación');
+    } else {
+      setError('Error al iniciar sesión. Por favor, inténtalo de nuevo.');
+    }
+    console.error('Error en inicio de sesión:', err);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
