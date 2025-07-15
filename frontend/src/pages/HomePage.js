@@ -113,13 +113,6 @@ const HomePage = ({ onLoginSuccess }) => {
 
   return (
     <LoginContainer>
-      {isAuthenticated && (
-        <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 10 }}>
-          <Button variant="outlined" color="secondary" onClick={handleLogout}>
-            Cerrar sesión
-          </Button>
-        </Box>
-      )}
       <Box sx={{ 
         display: 'flex', 
         flexDirection: { xs: 'column', md: 'row' },
