@@ -17,6 +17,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Logo from '../assets/logo-cads.png';
+import axios from 'axios'; 
+
 
 const LoginContainer = styled(Box)({
   minHeight: '100vh',
@@ -44,8 +46,6 @@ const FormTitle = styled(Typography)({
   fontSize: '1.5rem',
 });
 
-import axios from 'axios';
-
 const HomePage = ({ onLoginSuccess }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,7 +56,14 @@ const HomePage = ({ onLoginSuccess }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  
+
+  // --- LOGOUT ---
+  const isAuthenticated = Boolean(localStorage.getItem('token'));
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
+  };
+
   useEffect(() => {
     if (location.state?.from === 'register') {
       setSuccessMessage('¡Registro exitoso! Por favor inicia sesión.');
@@ -106,6 +113,13 @@ const HomePage = ({ onLoginSuccess }) => {
 
   return (
     <LoginContainer>
+      {isAuthenticated && (
+        <Box sx={{ position: 'absolute', top: 16, right: 16, zIndex: 10 }}>
+          <Button variant="outlined" color="secondary" onClick={handleLogout}>
+            Cerrar sesión
+          </Button>
+        </Box>
+      )}
       <Box sx={{ 
         display: 'flex', 
         flexDirection: { xs: 'column', md: 'row' },
