@@ -100,19 +100,6 @@ public class SecurityConfig {
         return config.getAuthenticationManager();
     }
     
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new org.springframework.security.core.userdetails.UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return new org.springframework.security.core.userdetails.User(
-                    "user",
-                    "{noop}password",
-                    new java.util.ArrayList<>()
-                );
-            }
-        };
-    }
     
     /**
      * Configuración del codificador de contraseñas BCrypt

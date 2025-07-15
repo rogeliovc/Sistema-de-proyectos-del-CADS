@@ -69,6 +69,7 @@ public class Usuario implements UserDetails {
     private String usuarioAnterior;
     
     @Column(name = "PASSWORD")
+    @com.fasterxml.jackson.annotation.JsonProperty(access = com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY)
     private String password;
     
     @Column(name = "ENABLED")
