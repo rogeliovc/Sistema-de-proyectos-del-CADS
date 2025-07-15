@@ -5,15 +5,20 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
 @Table(name = "USUARIOCADS")
-public class Usuario {
+public class Usuario implements UserDetails {
     
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -66,10 +71,54 @@ public class Usuario {
     @Column(name = "PASSWORD")
     private String password;
     
+    @Column(name = "ENABLED")
+    private boolean enabled = true;
+    
+    @Column(name = "ACCOUNT_NON_EXPIRED")
+    private boolean accountNonExpired = true;
+    
+    @Column(name = "CREDENTIALS_NON_EXPIRED")
+    private boolean credentialsNonExpired = true;
+    
+    @Column(name = "ACCOUNT_NON_LOCKED")
+    private boolean accountNonLocked = true;
+    
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "USUARIO_ROLES", joinColumns = @JoinColumn(name = "usuario_id"))
     @Column(name = "role")
     private Set<String> roles = new HashSet<>();
+    
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority("RO_" + role))
+                .collect(Collectors.toList());
+    }
+    
+    @Override
+    public String getUsername() {
+        return this.correo; // Usamos el correo como nombre de usuario
+    }
+    
+    @Override
+    public boolean isAccountNonExpired() {
+        return accountNonExpired;
+    }
+    
+    @Override
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+    
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+    
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
     
     @CreationTimestamp
     @Column(name = "FECHA_CREACION", updatable = false)
