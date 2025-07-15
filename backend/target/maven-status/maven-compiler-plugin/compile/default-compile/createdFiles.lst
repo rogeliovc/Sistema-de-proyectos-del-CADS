@@ -1,0 +1,14 @@
+com/cads/entities/UsuarioHPC.class
+com/cads/entities/ProyectoUsuario.class
+com/cads/services/UsuarioService.class
+com/cads/entities/ProyectoSoftware.class
+com/cads/entities/Proyecto.class
+com/cads/entities/ProyectoAdicional.class
+com/cads/config/WebConfig.class
+com/cads/SistemaProyectosCadsApplication.class
+com/cads/entities/ProyectoRecursos.class
+com/cads/entities/Usuario.class
+com/cads/controllers/UsuarioController.class
+com/cads/repositories/UsuarioRepository.class
+com/cads/entities/UsuarioVPN.class
+com/cads/controllers/TestController.class

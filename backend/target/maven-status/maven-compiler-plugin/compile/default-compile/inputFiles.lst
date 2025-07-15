@@ -1,0 +1,14 @@
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/entities/ProyectoSoftware.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/entities/UsuarioVPN.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/SistemaProyectosCadsApplication.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/entities/ProyectoRecursos.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/config/WebConfig.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/controllers/UsuarioController.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/entities/Proyecto.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/entities/ProyectoAdicional.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/entities/UsuarioHPC.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/services/UsuarioService.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/controllers/TestController.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/entities/ProyectoUsuario.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/repositories/UsuarioRepository.java
+/home/rogeliovc/trabajosWeb/Sistema-de-proyectos-del-CADS/backend/src/main/java/com/cads/entities/Usuario.java

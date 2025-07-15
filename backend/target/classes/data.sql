@@ -1,0 +1,5 @@
+-- Datos de prueba para usuarios
+INSERT INTO USUARIOCADS (USUARIOCADS_ID, NOMBRE, APELLIDO1, APELLIDO2, CORREO, CODIGO, TELEFONO, SIT_ACADEMICA, INSTITUCION, CIUDAD, DEPARTAMENTO, ESTADO, ES_USUARIO, FECHA_CREACION, FECHA_ACTUALIZACION, PASSWORD, PUESTO, USUARIO_ANT) VALUES
+('1', 'Juan', 'Pérez', 'López', 'juan.perez@universidad.com', 'U001', '555-1234', 'Estudiante', 'Universidad Nacional', 'Ciudad de México', 'Ciudad de México', 'Activo', 'Sí', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '$2a$10$randomSalt1', 'Estudiante', null),
+('2', 'María', 'García', 'Martínez', 'maria.garcia@universidad.com', 'U002', '555-5678', 'Docente', 'Universidad Nacional', 'Ciudad de México', 'Ciudad de México', 'Activo', 'Sí', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '$2a$10$randomSalt2', 'Docente', null),
+('3', 'Carlos', 'Rodríguez', 'Sánchez', 'carlos.rodriguez@universidad.com', 'U003', '555-9012', 'Investigador', 'Universidad Nacional', 'Ciudad de México', 'Ciudad de México', 'Activo', 'Sí', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '$2a$10$randomSalt3', 'Investigador', null);

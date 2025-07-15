@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -15,7 +16,9 @@ import java.util.Set;
 public class Usuario {
     
     @Id
-    @Column(name = "USUARIOCADS_ID")
+    @GeneratedValue(generator = "uuid2")
+    @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
+    @Column(name = "USUARIOCADS_ID", columnDefinition = "VARCHAR(36)")
     private String id;
     
     @Column(name = "CODIGO")
