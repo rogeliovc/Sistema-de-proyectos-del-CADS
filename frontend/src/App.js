@@ -5,6 +5,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import HomePage from './pages/HomePage';
 import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
+import SolicitudProyectoPage from './pages/SolicitudProyectoPage';
 
 const theme = createTheme({
   palette: {
@@ -44,7 +45,6 @@ const theme = createTheme({
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -64,6 +64,14 @@ function App() {
             element={
               isAuthenticated ? 
               <DashboardPage onLogout={() => setIsAuthenticated(false)} /> : 
+              <Navigate to="/" />
+            } 
+          />
+          <Route 
+            path="/solicitud-proyecto" 
+            element={
+              isAuthenticated ? 
+              <SolicitudProyectoPage /> : 
               <Navigate to="/" />
             } 
           />
