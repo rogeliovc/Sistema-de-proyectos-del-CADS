@@ -39,6 +39,7 @@ const MainNavbar = ({ onMenuClick, open }) => {
   const isNotificationsOpen = Boolean(notificationsAnchorEl);
   
   const handleProfileMenuOpen = (event) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
   
@@ -47,6 +48,7 @@ const MainNavbar = ({ onMenuClick, open }) => {
   };
   
   const handleNotificationsOpen = (event) => {
+    event.stopPropagation();
     setNotificationsAnchorEl(event.currentTarget);
   };
   
@@ -59,214 +61,57 @@ const MainNavbar = ({ onMenuClick, open }) => {
     navigate('/');
     handleMenuClose();
   };
-  
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-      PaperProps={{
-        elevation: 3,
-        sx: {
-          width: 250,
-          mt: 1,
-          borderRadius: 2,
-          overflow: 'visible',
-          '&:before': {
-            content: '""',
-            display: 'block',
-            position: 'absolute',
-            top: 0,
-            right: 14,
-            width: 10,
-            height: 10,
-            bgcolor: 'background.paper',
-            transform: 'translateY(-50%) rotate(45deg)',
-            zIndex: 0,
-          },
-        },
-      }}
-    >
-      <Box sx={{ px: 2, py: 1.5, borderBottom: 1, borderColor: 'divider' }}>
-        <Typography variant="subtitle1" fontWeight={600}>
-          {currentUser?.name || 'Usuario'}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {currentUser?.email || 'usuario@ejemplo.com'}
-        </Typography>
-      </Box>
-      <MenuItem 
-        onClick={() => {
-          navigate('/perfil');
-          handleMenuClose();
-        }}
-        sx={{ py: 1.5 }}
-      >
-        <AccountCircleIcon sx={{ mr: 2, color: 'text.secondary' }} />
-        <Typography variant="body2">Perfil</Typography>
-      </MenuItem>
-      <MenuItem 
-        onClick={() => {
-          navigate('/configuracion');
-          handleMenuClose();
-        }}
-        sx={{ py: 1.5 }}
-      >
-        <SettingsIcon sx={{ mr: 2, color: 'text.secondary' }} />
-        <Typography variant="body2">Configuración</Typography>
-      </MenuItem>
-      <Divider />
-      <MenuItem onClick={handleLogout} sx={{ py: 1.5 }}>
-        <LogoutIcon sx={{ mr: 2, color: 'error.main' }} />
-        <Typography variant="body2" color="error">
-          Cerrar sesión
-        </Typography>
-      </MenuItem>
-    </Menu>
-  );
-  
+
   const notifications = [
-    { id: 1, title: 'Nueva tarea asignada', message: 'Tienes una nueva tarea en el proyecto X', time: 'Hace 2 horas' },
-    { id: 2, title: 'Recordatorio', message: 'Reunión de equipo en 15 minutos', time: 'Hace 5 horas' },
-    { id: 3, title: 'Actualización', message: 'El proyecto Y ha sido actualizado', time: 'Ayer' },
+    { id: 1, text: 'Nueva solicitud de proyecto', time: 'Hace 5 minutos' },
+    { id: 2, text: 'Tienes un mensaje sin leer', time: 'Hace 1 hora' },
+    { id: 3, text: 'Recordatorio: Reunión a las 3 PM', time: 'Hace 2 horas' },
   ];
-  
-  const renderNotifications = (
-    <Menu
-      anchorEl={notificationsAnchorEl}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'right',
-      }}
-      id="notifications-menu"
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isNotificationsOpen}
-      onClose={handleNotificationsClose}
-      PaperProps={{
-        elevation: 3,
-        sx: {
-          width: 360,
-          maxWidth: '100%',
-          mt: 1,
-          borderRadius: 2,
-          overflow: 'hidden',
-          '&:before': {
-            content: '""',
-            display: 'block',
-            position: 'absolute',
-            top: 0,
-            right: 14,
-            width: 10,
-            height: 10,
-            bgcolor: 'background.paper',
-            transform: 'translateY(-50%) rotate(45deg)',
-            zIndex: 0,
-          },
-        },
+
+  return (
+    <AppBar 
+      position="fixed" 
+      elevation={0}
+      sx={{
+        backgroundColor: 'background.paper',
+        color: 'text.primary',
+        borderBottom: '1px solid',
+        borderColor: 'divider',
+        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
-      <Box sx={{ px: 2, py: 1.5, borderBottom: 1, borderColor: 'divider', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="subtitle1" fontWeight={600}>
-          Notificaciones
-        </Typography>
-        <Typography variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
-          Marcar todas como leídas
-        </Typography>
-      </Box>
-      <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
-        {notifications.length > 0 ? (
-          notifications.map((notification) => (
-            <MenuItem 
-              key={notification.id} 
-              sx={{ 
-                px: 2, 
-                py: 1.5,
-                borderBottom: 1, 
-                borderColor: 'divider',
-                '&:last-child': {
-                  borderBottom: 'none',
-                },
-                '&:hover': {
-                  backgroundColor: 'action.hover',
-                },
-              }}
-            >
-              <Box sx={{ width: '100%' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                  <Typography variant="subtitle2" fontWeight={600}>
-                    {notification.title}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {notification.time}
-                  </Typography>
-                </Box>
-                <Typography variant="body2" color="text.secondary">
-                  {notification.message}
-                </Typography>
-              </Box>
-            </MenuItem>
-          ))
-        ) : (
-          <Box sx={{ p: 3, textAlign: 'center' }}>
-            <NotificationsIcon sx={{ fontSize: 48, color: 'text.disabled', mb: 1 }} />
-            <Typography variant="body2" color="text.secondary">
-              No hay notificaciones nuevas
-            </Typography>
-          </Box>
-        )}
-      </Box>
-      {notifications.length > 0 && (
-        <Box sx={{ p: 1.5, borderTop: 1, borderColor: 'divider', textAlign: 'center' }}>
-          <Typography 
-            variant="body2" 
-            color="primary" 
-            sx={{ 
+      <Toolbar disableGutters sx={{ 
+        px: { xs: 2, md: 3 }, 
+        width: '100%',
+        position: 'relative',
+        zIndex: 1300, // Asegurar que esté por encima de otros elementos
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+          <Box 
+            component="button"
+            onClick={(e) => {
+              console.log('Botón de menú clickeado - Box');
+              e.stopPropagation();
+              if (onMenuClick) onMenuClick(e);
+            }}
+            sx={{
+              background: 'none',
+              border: 'none',
+              padding: '8px',
+              marginRight: '16px',
               cursor: 'pointer',
-              fontWeight: 500,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'inherit',
               '&:hover': {
-                textDecoration: 'underline',
+                backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                borderRadius: '50%',
               },
             }}
           >
-            Ver todas las notificaciones
-          </Typography>
-        </Box>
-      )}
-    </Menu>
-  );
-
-  return (
-    <>
-      <Toolbar disableGutters sx={{ px: { xs: 2, md: 3 }, width: '100%' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={onMenuClick}
-            edge="start"
-            sx={{ 
-              mr: 2,
-              color: 'text.primary',
-              ...(open && { display: 'none' }),
-            }}
-          >
             <MenuIcon />
-          </IconButton>
+          </Box>
           
           <Box 
             component="img"
@@ -295,9 +140,14 @@ const MainNavbar = ({ onMenuClick, open }) => {
         
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Tooltip title="Notificaciones">
-            <IconButton 
-              size="large" 
-              aria-label="show new notifications" 
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="Notificaciones"
+              aria-haspopup="true"
+              aria-controls={isNotificationsOpen ? 'notifications-menu' : undefined}
+              aria-expanded={isNotificationsOpen ? 'true' : undefined}
+              id="notifications-button"
               color="inherit"
               onClick={handleNotificationsOpen}
               sx={{ color: 'text.primary' }}
@@ -308,51 +158,132 @@ const MainNavbar = ({ onMenuClick, open }) => {
             </IconButton>
           </Tooltip>
           
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              ml: 1,
-              px: 1.5,
-              py: 0.5,
-              borderRadius: 2,
-              cursor: 'pointer',
-              '&:hover': {
-                backgroundColor: 'action.hover',
-              },
-            }}
+          <IconButton
+            edge="end"
+            aria-label="Cuenta de usuario"
+            aria-controls={isMenuOpen ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            aria-expanded={isMenuOpen ? 'true' : undefined}
             onClick={handleProfileMenuOpen}
+            color="inherit"
+            sx={{ ml: 1 }}
           >
             <Avatar 
               alt={currentUser?.name || 'Usuario'} 
-              src={currentUser?.avatar}
-              sx={{ 
-                width: 36, 
-                height: 36,
-                bgcolor: 'primary.main',
-                fontSize: '1rem',
-                fontWeight: 600,
-              }}
+              src={currentUser?.avatar} 
+              sx={{ width: 36, height: 36 }}
             >
-              {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+              {currentUser?.name?.[0] || <PersonIcon />}
             </Avatar>
-            {!isMobile && (
-              <Box sx={{ ml: 1, textAlign: 'left' }}>
-                <Typography variant="subtitle2" noWrap sx={{ fontWeight: 600 }}>
-                  {currentUser?.name || 'Usuario'}
-                </Typography>
-                <Typography variant="caption" color="text.secondary" noWrap>
-                  {currentUser?.role || 'Usuario'}
-                </Typography>
-              </Box>
-            )}
-            <ArrowDropDownIcon sx={{ color: 'text.secondary' }} />
-          </Box>
+            <Box sx={{ ml: 1, display: { xs: 'none', md: 'block' } }}>
+              <Typography variant="subtitle2" color="text.primary">
+                {currentUser?.name || 'Usuario'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary">
+                {currentUser?.role || 'Rol no definido'}
+              </Typography>
+            </Box>
+            <ArrowDropDownIcon sx={{ ml: 0.5, color: 'text.secondary' }} />
+          </IconButton>
         </Box>
       </Toolbar>
-      {renderMenu}
-      {renderNotifications}
-    </>
+      
+      {/* Menú de notificaciones */}
+      <Menu
+        anchorEl={notificationsAnchorEl}
+        id="notifications-menu"
+        open={isNotificationsOpen}
+        onClose={handleNotificationsClose}
+        onClick={handleNotificationsClose}
+        PaperProps={{
+          elevation: 3,
+          sx: {
+            width: 360,
+            maxWidth: '100%',
+            mt: 1.5,
+            borderRadius: 2,
+            overflow: 'hidden',
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+          <Typography variant="subtitle1" fontWeight={600}>
+            Notificaciones
+          </Typography>
+        </Box>
+        
+        {notifications.length > 0 ? (
+          <Box sx={{ maxHeight: 300, overflow: 'auto' }}>
+            {notifications.map((notification) => (
+              <MenuItem key={notification.id} onClick={handleNotificationsClose}>
+                <Box sx={{ width: '100%' }}>
+                  <Typography variant="body2">
+                    {notification.text}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {notification.time}
+                  </Typography>
+                </Box>
+              </MenuItem>
+            ))}
+          </Box>
+        ) : (
+          <Box sx={{ p: 3, textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              No hay notificaciones nuevas
+            </Typography>
+          </Box>
+        )}
+      </Menu>
+      
+      {/* Menú de usuario */}
+      <Menu
+        anchorEl={anchorEl}
+        id="account-menu"
+        open={isMenuOpen}
+        onClose={handleMenuClose}
+        onClick={handleMenuClose}
+        PaperProps={{
+          elevation: 3,
+          sx: {
+            width: 240,
+            mt: 1.5,
+            borderRadius: 2,
+            overflow: 'hidden',
+          },
+        }}
+        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+      >
+        <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+          <Typography variant="subtitle1" fontWeight={600}>
+            {currentUser?.name || 'Usuario'}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {currentUser?.email || 'usuario@ejemplo.com'}
+          </Typography>
+        </Box>
+        
+        <MenuItem onClick={() => navigate('/perfil')}>
+          <AccountCircleIcon sx={{ mr: 1.5, color: 'text.secondary' }} />
+          <Typography variant="body2">Mi perfil</Typography>
+        </MenuItem>
+        
+        <MenuItem onClick={() => navigate('/configuracion')}>
+          <SettingsIcon sx={{ mr: 1.5, color: 'text.secondary' }} />
+          <Typography variant="body2">Configuración</Typography>
+        </MenuItem>
+        
+        <Divider />
+        
+        <MenuItem onClick={handleLogout}>
+          <LogoutIcon sx={{ mr: 1.5, color: 'text.secondary' }} />
+          <Typography variant="body2">Cerrar sesión</Typography>
+        </MenuItem>
+      </Menu>
+    </AppBar>
   );
 };
 

@@ -340,7 +340,7 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
             />
           </Grid>
           
-          <Grid item xs={12}>
+          <Grid xs={12} item>
             <TextField
               fullWidth
               label="Título del Proyecto"
@@ -393,7 +393,7 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
             </FormControl>
           </Grid>
           
-          <Grid item xs={12}>
+          <Grid xs={12} item>
             <TextField
               fullWidth
               label="Palabras Clave"
@@ -406,7 +406,7 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
             />
           </Grid>
           
-          <Grid item xs={12}>
+          <Grid xs={12} item>
             <TextField
               fullWidth
               label="Descripción del Proyecto"
@@ -421,7 +421,7 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
             />
           </Grid>
           
-          <Grid item xs={12}>
+          <Grid xs={12} item>
             <TextField
               fullWidth
               label="Objetivo General"
@@ -436,7 +436,7 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
             />
           </Grid>
           
-          <Grid item xs={12}>
+          <Grid xs={12} item>
             <TextField
               fullWidth
               label="Descripción Técnica"
@@ -451,7 +451,7 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
             />
           </Grid>
           
-          <Grid item xs={12}>
+          <Grid xs={12} item>
             <TextField
               fullWidth
               label="Resultados Esperados"
@@ -662,7 +662,7 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
               Responsable {index + 1}{index === 0 ? ' (Principal)' : ''}
             </Typography>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={4}>
+              <Grid xs={12} md={4} item>
                 <TextField
                   fullWidth
                   label="Nombre del Responsable"
@@ -685,7 +685,7 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
                   margin="normal"
                 />
               </Grid>
-              <Grid item xs={12} md={3}>
+              <Grid xs={12} md={3} item>
                 <TextField
                   fullWidth
                   label="Teléfono"
@@ -696,7 +696,7 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
                   margin="normal"
                 />
               </Grid>
-              <Grid item xs={12} md={1} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Grid xs={12} md={1} item sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <IconButton 
                   onClick={() => eliminarResponsable(responsable.id)}
                   disabled={formData.responsables.length <= 1}

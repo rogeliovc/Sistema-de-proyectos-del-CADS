@@ -16,6 +16,7 @@ import {
   Stack,
   Avatar,
   IconButton,
+  styled,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -37,7 +38,6 @@ import {
   Logout as LogoutIcon,
   Person as PersonIcon,
 } from '@mui/icons-material';
-import { styled } from '@mui/material/styles';
 import { useAuth } from '../../contexts/AuthContext';
 
 const drawerWidth = 280;
@@ -50,30 +50,39 @@ const StyledDrawer = styled(Drawer, {
   flexShrink: 0,
   whiteSpace: 'nowrap',
   boxSizing: 'border-box',
-  transition: theme.transitions.create(['width', 'margin'], {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  zIndex: theme.zIndex.drawer + 1, // Aumentar z-index para asegurar que esté por encima
+  height: '100vh',
+  transition: theme.transitions.create(['width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.enteringScreen,
   }),
   '& .MuiDrawer-paper': {
+    position: 'fixed', // Cambiado a fixed para asegurar la posición
+    top: 0,
+    left: 0,
     width: open ? drawerWidth : collapsedWidth,
+    height: '100vh', // Asegurar altura completa
     borderRight: 'none',
     backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[1],
-    transition: theme.transitions.create(['width', 'margin'], {
+    boxShadow: theme.shadows[3],
+    transition: theme.transitions.create(['width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
     }),
     overflowX: 'hidden',
+    overflowY: 'auto',
     '&::-webkit-scrollbar': {
-      width: '0.4em',
+      width: '6px',
     },
     '&::-webkit-scrollbar-track': {
-      boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-      webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+      background: 'transparent',
     },
     '&::-webkit-scrollbar-thumb': {
       backgroundColor: theme.palette.action.hover,
-      borderRadius: 10,
+      borderRadius: '4px',
     },
   },
 }));
@@ -182,19 +191,23 @@ const menuItems = [
   },
 ];
 
-const MainSidebar = ({ open, onClose }) => {
+const MainSidebar = ({ open, onClose, isMobile: isMobileProp = false }) => {
   const theme = useTheme();
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUser, logout } = useAuth();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobileMedia = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = isMobileProp !== undefined ? isMobileProp : isMobileMedia;
+  
+  console.log('MainSidebar - isMobile:', isMobile, 'open:', open, 'isMobileProp:', isMobileProp);
   const [expandedItems, setExpandedItems] = useState({});
   
   const isActive = (path) => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
 
-  const handleToggleExpand = (text) => {
+  const handleToggleExpand = (text, event) => {
+    event.stopPropagation();
     setExpandedItems((prev) => ({
       ...prev,
       [text]: !prev[text],
@@ -218,11 +231,11 @@ const MainSidebar = ({ open, onClose }) => {
             <StyledListItemButton
               selected={isItemActive}
               nested={isNested ? 1 : 0}
-              onClick={() => {
-                if (isMobile) onClose();
+              onClick={(event) => {
                 if (hasChildren) {
-                  handleToggleExpand(item.text);
+                  handleToggleExpand(item.text, event);
                 } else {
+                  if (isMobile && onClose) onClose();
                   navigate(item.path);
                 }
               }}
@@ -272,137 +285,155 @@ const MainSidebar = ({ open, onClose }) => {
     });
   };
 
+  const drawerVariant = isMobile ? 'temporary' : 'persistent';
+  
   return (
     <StyledDrawer
-      variant={isMobile ? 'temporary' : 'permanent'}
+      variant={drawerVariant}
       open={open}
       onClose={onClose}
       ModalProps={{
-        keepMounted: true,
+        keepMounted: true, // Better open performance on mobile
+      }}
+      sx={{
+        display: { xs: isMobile ? 'block' : 'none', md: isMobile ? 'none' : 'block' },
+        '& .MuiDrawer-paper': {
+          boxSizing: 'border-box',
+          width: open ? drawerWidth : collapsedWidth,
+          borderRight: 'none',
+          boxShadow: isMobile ? 8 : 1,
+        },
       }}
     >
-      <DrawerHeader>
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <DrawerHeader>
+          <Box 
+            component={RouterLink} 
+            to="/dashboard" 
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              textDecoration: 'none',
+              color: 'inherit',
+              flexGrow: 1,
+            }}
+          >
+            <Box
+              component="img"
+              src="/logo-icon.png"
+              alt="Logo"
+              sx={{ 
+                height: 32, 
+                mr: open ? 1 : 0,
+                transition: 'margin 0.2s',
+              }}
+            />
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{
+                fontWeight: 700,
+                color: 'primary.main',
+                opacity: open ? 1 : 0,
+                transition: 'opacity 0.2s',
+                width: open ? 'auto' : 0,
+                overflow: 'hidden',
+              }}
+            >
+              CADS
+            </Typography>
+          </Box>
+          {!isMobile ? (
+            <IconButton 
+              onClick={onClose} 
+              size="small"
+              sx={{
+                backgroundColor: theme.palette.action.hover,
+                '&:hover': {
+                  backgroundColor: theme.palette.action.selected,
+                },
+              }}
+            >
+              {open ? (
+                <ChevronLeftIcon fontSize="small" />
+              ) : (
+                <ChevronRightIcon fontSize="small" />
+              )}
+            </IconButton>
+          ) : (
+            <IconButton onClick={onClose} color="inherit">
+              <ChevronLeftIcon />
+            </IconButton>
+          )}
+        </DrawerHeader>
+        
+        <Divider />
+        
+        <Box sx={{ 
+          flexGrow: 1, 
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          '&::-webkit-scrollbar': {
+            width: '6px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'transparent',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            backgroundColor: theme.palette.divider,
+            borderRadius: '3px',
+          },
+        }}>
+          <List>
+            {renderMenuItems(menuItems)}
+          </List>
+        </Box>
+        
         <Box 
-          component={RouterLink} 
-          to="/dashboard" 
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            textDecoration: 'none',
-            color: 'inherit',
+          sx={{ 
+            p: 2, 
+            borderTop: `1px solid ${theme.palette.divider}`,
+            opacity: open ? 1 : 0,
+            transition: 'opacity 0.2s',
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
           }}
         >
-          <Box
-            component="img"
-            src="/logo-icon.png"
-            alt="Logo"
-            sx={{ 
-              height: 32, 
-              mr: open ? 1 : 0,
-              transition: 'margin 0.2s',
-            }}
-          />
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{
-              fontWeight: 700,
-              color: 'primary.main',
-              opacity: open ? 1 : 0,
-              transition: 'opacity 0.2s',
-              width: open ? 'auto' : 0,
-              overflow: 'hidden',
-            }}
-          >
-            CADS
-          </Typography>
-        </Box>
-        {!isMobile && (
-          <IconButton 
-            onClick={onClose} 
-            size="small"
-            sx={{
-              backgroundColor: theme.palette.action.hover,
-              '&:hover': {
-                backgroundColor: theme.palette.action.selected,
-              },
-            }}
-          >
-            {open ? (
-              <ChevronLeftIcon fontSize="small" />
-            ) : (
-              <ChevronRightIcon fontSize="small" />
-            )}
-          </IconButton>
-        )}
-      </DrawerHeader>
-      
-      <Divider />
-      
-      <Box sx={{ 
-        flexGrow: 1, 
-        overflowY: 'auto',
-        overflowX: 'hidden',
-        '&::-webkit-scrollbar': {
-          width: '6px',
-        },
-        '&::-webkit-scrollbar-track': {
-          background: 'transparent',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          backgroundColor: theme.palette.divider,
-          borderRadius: '3px',
-        },
-      }}>
-        <List>
-          {renderMenuItems(menuItems.filter(item => !item.hidden))}
-        </List>
-      </Box>
-      
-      <Box 
-        sx={{ 
-          p: 2, 
-          borderTop: `1px solid ${theme.palette.divider}`,
-          opacity: open ? 1 : 0,
-          transition: 'opacity 0.2s',
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-        }}
-      >
-        <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
-          <IconButton size="small" color="inherit">
-            <HelpIcon fontSize="small" />
-          </IconButton>
-          <IconButton size="small" color="inherit">
-            <NotificationIcon fontSize="small" />
-          </IconButton>
-          <IconButton size="small" color="inherit" onClick={handleLogout}>
-            <LogoutIcon fontSize="small" />
-          </IconButton>
-        </Stack>
-        
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar
-            sx={{
-              width: 36,
-              height: 36,
-              mr: 1.5,
-              bgcolor: 'primary.main',
-              color: 'primary.contrastText',
-              fontSize: '0.875rem',
-              fontWeight: 600,
-            }}
-          >
-            {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
-          </Avatar>
-          <Box sx={{ minWidth: 0 }}>
-            <Typography variant="subtitle2" noWrap>
-              {currentUser?.name || 'Usuario'}
-            </Typography>
-            <Typography variant="caption" color="text.secondary" noWrap>
-              {currentUser?.role || 'Rol'}
-            </Typography>
+          <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
+            <IconButton size="small" color="inherit">
+              <HelpIcon fontSize="small" />
+            </IconButton>
+            <IconButton size="small" color="inherit">
+              <NotificationIcon fontSize="small" />
+            </IconButton>
+            <IconButton size="small" color="inherit" onClick={handleLogout}>
+              <LogoutIcon fontSize="small" />
+            </IconButton>
+          </Stack>
+          
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Avatar
+              sx={{
+                width: 36,
+                height: 36,
+                mr: 1.5,
+                bgcolor: 'primary.main',
+                color: 'primary.contrastText',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+              }}
+            >
+              {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
+            </Avatar>
+            <Box sx={{ minWidth: 0 }}>
+              <Typography variant="subtitle2" noWrap>
+                {currentUser?.name || 'Usuario'}
+              </Typography>
+              <Typography variant="caption" color="text.secondary" noWrap>
+                {currentUser?.role || 'Rol'}
+              </Typography>
+            </Box>
           </Box>
         </Box>
       </Box>

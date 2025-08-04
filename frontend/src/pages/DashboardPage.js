@@ -155,7 +155,7 @@ const DashboardPage = () => {
       {/* Tarjetas de estadísticas */}
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {stats.map((stat, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+          <Grid key={index} xs={12} sm={6} md={3} item>
             <DashboardCard 
               title={stat.title}
               value={stat.value}
@@ -204,7 +204,7 @@ const DashboardPage = () => {
         </Box>
         <Grid container spacing={3}>
           {recentProjects.map((project) => (
-            <Grid item xs={12} md={4} key={project.id}>
+            <Grid key={project.id} xs={12} md={4}>
               <Paper 
                 sx={{ 
                   p: 2, 
@@ -262,7 +262,7 @@ const DashboardPage = () => {
       
       {/* Otra sección de actividad reciente */}
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+        <Grid xs={12} md={6} item>
           <Paper 
             sx={{ 
               p: 3, 
