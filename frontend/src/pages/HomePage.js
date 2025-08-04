@@ -17,7 +17,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Logo from '../assets/logo-cads.png';
-import axios from 'axios'; 
+import axios from 'axios';
+import { useAuth } from '../contexts/AuthContext';
 
 
 const LoginContainer = styled(Box)({
@@ -46,15 +47,16 @@ const FormTitle = styled(Typography)({
   fontSize: '1.5rem',
 });
 
-const HomePage = ({ onLoginSuccess }) => {
+const HomePage = () => {
   const navigate = useNavigate();
+  const { login: loginUser, error: authError, loading: authLoading } = useAuth();
   const location = useLocation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [formError, setFormError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
   // --- LOGOUT ---
@@ -77,35 +79,38 @@ const HomePage = ({ onLoginSuccess }) => {
     }
   }, [location.state]);
 
+  // Manejar envío del formulario
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  setError('');
-
-  try {
-    const response = await axios.post('http://localhost:8080/api/auth/login', {
-      email,
-      password,
-    });
-
-    if (response.data && response.data.token) {
-      // Guarda el token en localStorage
-      localStorage.setItem('token', response.data.token);
-      onLoginSuccess(); // Puedes pasar el token si lo necesitas globalmente
-    } else {
-      setError('Respuesta inválida del servidor');
+    e.preventDefault();
+    setFormError('');
+    setSuccessMessage('');
+    
+    // Validación básica
+    if (!email || !password) {
+      setFormError('Por favor ingresa tu correo y contraseña');
+      return;
     }
-  } catch (err) {
-    if (err.response && err.response.data) {
-      setError(typeof err.response.data === 'string' ? err.response.data : 'Error de autenticación');
-    } else {
-      setError('Error al iniciar sesión. Por favor, inténtalo de nuevo.');
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Llamar a la función de login del contexto de autenticación
+      const result = await loginUser(email, password);
+      
+      if (result.success) {
+        setSuccessMessage('¡Inicio de sesión exitoso!');
+        // Redirigir después de un breve retraso para mostrar el mensaje
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 1000);
+      }
+    } catch (err) {
+      console.error('Error al iniciar sesión:', err);
+      setFormError(err.message || 'Error al iniciar sesión. Verifica tus credenciales.');
+    } finally {
+      setIsSubmitting(false);
     }
-    console.error('Error en inicio de sesión:', err);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -156,16 +161,13 @@ const HomePage = ({ onLoginSuccess }) => {
               Iniciar Sesión
             </Typography>
             
+            {(formError || authError) && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {formError || authError}
+              </Alert>
+            )}
             {successMessage && (
-              <Alert 
-                severity="success" 
-                sx={{ 
-                  mb: 3, 
-                  width: '100%',
-                  maxWidth: '400px',
-                  mx: 'auto'
-                }}
-              >
+              <Alert severity="success" sx={{ mb: 2 }}>
                 {successMessage}
               </Alert>
             )}
@@ -264,23 +266,20 @@ const HomePage = ({ onLoginSuccess }) => {
                 type="submit"
                 fullWidth
                 variant="contained"
-                color="primary"
                 size="large"
-                sx={{ 
-                  py: 1.25,
+                disabled={isSubmitting || authLoading}
+                sx={{
+                  mt: 3,
                   mb: 2,
-                  textTransform: 'none',
+                  py: 1.5,
                   fontSize: '1rem',
-                  fontWeight: '500',
-                  borderRadius: '8px',
-                  backgroundColor: '#1a73e8',
-                  '&:hover': {
-                    backgroundColor: '#1557b0',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-                  },
+                  fontWeight: 600,
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  boxShadow: '0 4px 14px 0 rgba(0, 118, 255, 0.39)',
                 }}
               >
-                Iniciar Sesión
+                {(isSubmitting || authLoading) ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </Button>
               
               <Typography 

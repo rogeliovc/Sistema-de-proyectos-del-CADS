@@ -82,10 +82,9 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
     descripcion: initialValues.descripcion || '',
     
     // Fechas
-    fechaSolicitud: initialValues.fechaSolicitud || new Date(),
-    fechaInicio: initialValues.fechaInicio || null,
-    fechaFinAprox: initialValues.fechaFinAprox || null,
-    tiempoUso: initialValues.tiempoUso || 1,
+    fechaSolicitud: initialValues.fechaSolicitud || '',
+    fechaFinAprox: initialValues.fechaFinAprox || '',
+    tiempoUso: initialValues.tiempoUso || '',
     
     // Detalles del proyecto
     objetivo: initialValues.objetivo || '',
@@ -96,15 +95,13 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
     metodosComputacionales: initialValues.metodosComputacionales || '',
     
     // Información adicional
-    conacytSi: initialValues.conacytSi || false,
+    conacytSi: initialValues.conacytSi || '',
     conacytNum: initialValues.conacytNum || '',
-    usoRup: initialValues.usoRup || false,
+    usoRup: initialValues.usoRup || '',
     usoCual: initialValues.usoCual || '',
     
-    // Relaciones
-    objetivosEspecificos: initialValues.objetivosEspecificos || [{ id: 1, descripcion: '' }],
-    responsables: initialValues.responsables || [{ id: 1, nombre: '', correo: '', telefono: '' }],
-    documentos: initialValues.documentos || []
+    // Status
+    proyectoStatusId: initialValues.proyectoStatusId || ''
   });
 
   // Opciones para campos de selección
@@ -145,10 +142,10 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
 
   // Manejador de cambios para campos simples
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: value.substring(0, 50)
     }));
   };
 
@@ -162,9 +159,10 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
 
   // Manejador para checkboxes
   const handleCheckboxChange = (name) => (e) => {
+    const value = e.target.checked ? 'Sí' : 'No';
     setFormData(prev => ({
       ...prev,
-      [name]: e.target.checked
+      [name]: value
     }));
   };
 
@@ -268,37 +266,6 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
     // Validar campos requeridos
     if (!formData.titulo.trim()) newErrors.titulo = 'El título es requerido';
     if (!formData.nombre.trim()) newErrors.nombre = 'El nombre del proyecto es requerido';
-    if (!formData.descripcion.trim()) newErrors.descripcion = 'La descripción es requerida';
-    if (!formData.areaConocimiento) newErrors.areaConocimiento = 'El área de conocimiento es requerida';
-    if (!formData.fechaInicio) newErrors.fechaInicio = 'La fecha de inicio es requerida';
-    if (!formData.fechaFinAprox) newErrors.fechaFinAprox = 'La fecha de fin aproximada es requerida';
-    if (formData.conacytSi && !formData.conacytNum.trim()) {
-      newErrors.conacytNum = 'El número de proyecto CONACYT es requerido';
-    }
-    
-    // Validar fechas
-    if (formData.fechaInicio && formData.fechaFinAprox && formData.fechaInicio > formData.fechaFinAprox) {
-      newErrors.fechaFinAprox = 'La fecha de fin debe ser posterior a la fecha de inicio';
-    }
-    
-    // Validar que al menos un objetivo específico esté completo
-    const objetivosCompletos = formData.objetivosEspecificos.some(
-      objetivo => objetivo.descripcion.trim() !== ''
-    );
-    if (!objetivosCompletos) {
-      newErrors.objetivosEspecificos = 'Debe agregar al menos un objetivo específico';
-    }
-    
-    // Validar que todos los responsables tengan los campos requeridos
-    const responsablesValidos = formData.responsables.every(responsable => 
-      responsable.nombre.trim() !== '' && 
-      responsable.correo.trim() !== '' && 
-      responsable.telefono.trim() !== ''
-    );
-    
-    if (!responsablesValidos) {
-      newErrors.responsables = 'Todos los campos de los responsables son obligatorios';
-    }
     
     if (Object.keys(newErrors).length > 0) {
       // Mostrar errores si los hay
@@ -310,12 +277,10 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
     // Preparar datos para enviar
     const datosEnvio = {
       ...formData,
-      // Asegurarse de que las fechas estén en el formato correcto
-      fechaSolicitud: formData.fechaSolicitud || new Date(),
       // Si no es CONACYT, limpiar el número
-      conacytNum: formData.conacytSi ? formData.conacytNum : '',
+      conacytNum: formData.conacytSi === 'Sí' ? formData.conacytNum : '',
       // Si no se especificó uso de RUP, limpiar el campo
-      usoCual: formData.usoRup ? formData.usoCual : ''
+      usoCual: formData.usoRup === 'Sí' ? formData.usoCual : ''
     };
     
     // Si pasa la validación, enviar el formulario
