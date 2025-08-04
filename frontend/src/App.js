@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import RegisterPage from './pages/RegisterPage';
 import SolicitudProyectoPage from './pages/SolicitudProyectoPage';
+import SeguimientoProyectosPage from './pages/SeguimientoProyectosPage';
 
 // Components
 import MainLayout from './components/layout/MainLayout';
@@ -106,6 +107,16 @@ function App() {
                   <ProtectedRoute>
                     <MainLayout>
                       <SolicitudProyectoPage />
+                    </MainLayout>
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/seguimiento-proyectos" 
+                element={
+                  <ProtectedRoute>
+                    <MainLayout>
+                      <SeguimientoProyectosPage />
                     </MainLayout>
                   </ProtectedRoute>
                 } 

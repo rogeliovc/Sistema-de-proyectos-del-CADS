@@ -82,26 +82,38 @@ const SolicitudProyectoForm = ({ onSubmit, initialValues = {} }) => {
     descripcion: initialValues.descripcion || '',
     
     // Fechas
-    fechaSolicitud: initialValues.fechaSolicitud || '',
-    fechaFinAprox: initialValues.fechaFinAprox || '',
+    fechaSolicitud: initialValues.fechaSolicitud || null,
+    fechaFinAprox: initialValues.fechaFinAprox || null,
     tiempoUso: initialValues.tiempoUso || '',
     
     // Detalles del proyecto
     objetivo: initialValues.objetivo || '',
+    objetivosEspecificos: initialValues.objetivosEspecificos || [{ id: 1, descripcion: '' }],
     lineaInvestigacion: initialValues.lineaInvestigacion || '',
     palabrasClave: initialValues.palabrasClave || '',
     descripcionTecnica: initialValues.descripcionTecnica || '',
     resultadosEsperados: initialValues.resultadosEsperados || '',
     metodosComputacionales: initialValues.metodosComputacionales || '',
     
+    // Responsables
+    responsables: initialValues.responsables || [{
+      id: 1,
+      nombre: '',
+      correo: '',
+      telefono: ''
+    }],
+    
+    // Documentos
+    documentos: initialValues.documentos || [],
+    
     // Información adicional
-    conacytSi: initialValues.conacytSi || '',
+    conacytSi: initialValues.conacytSi || 'No',
     conacytNum: initialValues.conacytNum || '',
-    usoRup: initialValues.usoRup || '',
+    usoRup: initialValues.usoRup || 'No',
     usoCual: initialValues.usoCual || '',
     
     // Status
-    proyectoStatusId: initialValues.proyectoStatusId || ''
+    proyectoStatusId: initialValues.proyectoStatusId || '1'
   });
 
   // Opciones para campos de selección
