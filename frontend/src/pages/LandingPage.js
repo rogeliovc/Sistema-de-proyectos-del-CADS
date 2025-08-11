@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ParticlesBackground from '../components/ParticlesBackground';
+import AnimatedTypingText from '../components/AnimatedTypingText';
 import { 
   Box, 
   Button, 
@@ -28,6 +30,9 @@ import {
   Link,
   IconButton
 } from '@mui/material';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import PhoneOutlined from '@mui/icons-material/PhoneOutlined';
+import LocationOnOutlined from '@mui/icons-material/LocationOnOutlined';
 import { 
   Computer as ComputerIcon,
   Storage as StorageIcon,
@@ -91,79 +96,100 @@ const FeatureCard = ({ icon, title, description, index }) => {
       }}
     >
       <Card 
-        elevation={3} 
+        elevation={0} 
         sx={{ 
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
-          transition: 'all 0.3s ease-in-out',
-          borderRadius: 3,
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          background: 'rgba(30, 41, 59, 0.6)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(99, 102, 241, 0.2)',
+          borderRadius: '16px',
           overflow: 'hidden',
           '&:hover': {
-            transform: 'translateY(-10px)',
-            boxShadow: `0 20px 40px -12px rgba(0,0,0,0.1)`,
+            transform: 'translateY(-8px)',
+            boxShadow: '0 12px 40px rgba(99, 102, 241, 0.15)',
+            borderColor: 'rgba(99, 102, 241, 0.5)',
+            background: 'rgba(30, 41, 59, 0.8)',
             '& .feature-icon': {
-              transform: 'scale(1.1)',
-              backgroundColor: theme.palette.secondary.main,
+              transform: 'scale(1.1) rotate(5deg)',
+              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.3), rgba(59, 130, 246, 0.3))',
+              boxShadow: '0 4px 20px rgba(99, 102, 241, 0.2)',
             },
             '& .feature-title': {
-              color: theme.palette.primary.main,
+              color: '#60a5fa',
             }
           },
+          '& .feature-icon': {
+            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          }
         }}
       >
-        <Box sx={{ 
-          p: 4, 
-          textAlign: 'center',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center'
-        }}>
+        <CardContent sx={{ flexGrow: 1, p: 4, position: 'relative', zIndex: 1 }}>
           <Box 
             className="feature-icon"
             sx={{
-              width: 80,
-              height: 80,
-              margin: '0 auto 24px',
-              borderRadius: '50%',
-              backgroundColor: theme.palette.primary.light,
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: theme.palette.primary.contrastText,
-              transition: 'all 0.3s ease-in-out',
-              '& svg': {
-                fontSize: '2rem'
-              }
+              width: 64,
+              height: 64,
+              mb: 3,
+              borderRadius: '18px',
+              background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(59, 130, 246, 0.15))',
+              color: '#60a5fa',
+              fontSize: '2.2rem',
+              boxShadow: '0 4px 15px rgba(96, 165, 250, 0.1)',
+              border: '1px solid rgba(99, 102, 241, 0.2)',
             }}
           >
-            {React.cloneElement(icon, { fontSize: 'large' })}
+            {React.cloneElement(icon, { sx: { fontSize: '1.8rem' } })}
           </Box>
           <Typography 
             className="feature-title"
-            variant="h6" 
+            variant="h5" 
             component="h3" 
             gutterBottom 
             sx={{ 
-              fontWeight: 600,
-              mb: 2,
-              transition: 'color 0.3s ease-in-out'
+              fontWeight: 700,
+              mb: 2.5,
+              color: '#f8fafc',
+              fontSize: '1.5rem',
+              transition: 'color 0.3s ease',
+              position: 'relative',
+              display: 'inline-block',
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                bottom: -8,
+                left: 0,
+                width: '40px',
+                height: '3px',
+                background: 'linear-gradient(90deg, #60a5fa, #3b82f6)',
+                borderRadius: '3px',
+                transition: 'width 0.3s ease',
+              },
+              '&:hover::after': {
+                width: '60px',
+              }
             }}
           >
             {title}
           </Typography>
           <Typography 
-            variant="body2" 
-            color="text.secondary"
+            variant="body1"
             sx={{ 
-              lineHeight: 1.7,
-              flexGrow: 1
+              color: '#e2e8f0',
+              opacity: 0.9,
+              lineHeight: 1.8,
+              fontSize: '1.05rem',
+              textShadow: '0 1px 2px rgba(0,0,0,0.1)',
             }}
           >
             {description}
           </Typography>
-        </Box>
+        </CardContent>
       </Card>
     </motion.div>
   );
@@ -198,66 +224,115 @@ const StatCard = ({ value, label, icon, index }) => {
         },
         hidden: { 
           opacity: 0, 
-          y: 20 
+          y: 30 
         }
       }}
     >
-      <Box sx={{ 
-        textAlign: 'center', 
-        p: 3,
-        transition: 'all 0.3s ease-in-out',
-        '&:hover': {
-          transform: 'translateY(-5px)',
-          '& .stat-value': {
-            color: 'primary.main',
+      <Card 
+        elevation={0}
+        sx={{
+          p: 4,
+          height: '100%',
+          borderRadius: '16px',
+          background: 'rgba(30, 41, 59, 0.6)',
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(99, 102, 241, 0.2)',
+          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+          position: 'relative',
+          overflow: 'hidden',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '4px',
+            background: 'linear-gradient(90deg, #60a5fa, #3b82f6)',
+            opacity: 0.8,
           },
-          '& .stat-icon': {
-            transform: 'scale(1.2)',
-            color: 'secondary.main',
+          '&:hover': {
+            transform: 'translateY(-8px)',
+            boxShadow: '0 12px 40px rgba(96, 165, 250, 0.15)',
+            background: 'rgba(30, 41, 59, 0.8)',
+            borderColor: 'rgba(99, 102, 241, 0.4)',
+            '& .stat-icon': {
+              transform: 'scale(1.1) rotate(5deg)',
+              background: 'linear-gradient(135deg, rgba(96, 165, 250, 0.3), rgba(37, 99, 235, 0.2))',
+              boxShadow: '0 4px 20px rgba(96, 165, 250, 0.2)',
+            },
+            '&::after': {
+              opacity: 0.1,
+            }
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'radial-gradient(circle at 20% 30%, rgba(96, 165, 250, 0.1) 0%, transparent 100%)',
+            opacity: 0,
+            transition: 'opacity 0.4s ease',
+            pointerEvents: 'none',
           }
-        }
-      }}>
-        <Box sx={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center', 
-          mb: 2,
-          '& .stat-icon': {
-            transition: 'all 0.3s ease-in-out',
-            color: 'primary.main',
-            fontSize: '2.5rem',
-            mr: 2
-          }
-        }}>
-          {React.cloneElement(icon, { className: 'stat-icon' })}
+        }}
+      >
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Box 
+            className="stat-icon"
+            sx={{
+              width: 64,
+              height: 64,
+              borderRadius: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              mr: 3,
+              background: 'linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(37, 99, 235, 0.1))',
+              color: '#60a5fa',
+              fontSize: '2rem',
+              transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+              border: '1px solid rgba(96, 165, 250, 0.2)',
+              boxShadow: '0 4px 15px rgba(96, 165, 250, 0.1)',
+            }}
+          >
+            {React.cloneElement(icon, { sx: { fontSize: '1.8rem' } })}
+          </Box>
+          <Box sx={{ position: 'relative', zIndex: 1 }}>
+            <Typography 
+              variant="h3" 
+              component="div" 
+              sx={{ 
+                fontWeight: 800,
+                background: 'linear-gradient(90deg, #60a5fa, #3b82f6)', 
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+                textFillColor: 'transparent',
+                lineHeight: 1.2,
+                fontSize: { xs: '2.2rem', sm: '2.5rem' },
+                textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+              }}
+            >
+              {value}
+            </Typography>
+            <Typography 
+              variant="subtitle1" 
+              sx={{ 
+                color: '#e2e8f0',
+                opacity: 0.95,
+                fontWeight: 500,
+                mt: 0.5,
+                fontSize: '1.1rem',
+                textShadow: '0 1px 2px rgba(0,0,0,0.1)',
+              }}
+            >
+              {label}
+            </Typography>
+          </Box>
         </Box>
-        <Typography 
-          variant="h3" 
-          component="div" 
-          className="stat-value"
-          sx={{ 
-            fontWeight: 'bold',
-            mb: 1,
-            background: 'linear-gradient(45deg, #1a237e 30%, #283593 90%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            transition: 'all 0.3s ease-in-out'
-          }}
-        >
-          {value}
-        </Typography>
-        <Typography 
-          variant="subtitle1" 
-          color="text.secondary"
-          sx={{ 
-            fontWeight: 500,
-            maxWidth: 200,
-            mx: 'auto'
-          }}
-        >
-          {label}
-        </Typography>
-      </Box>
+      </Card>
     </motion.div>
   );
 };
@@ -353,11 +428,14 @@ const LandingPage = () => {
       {/* Hero Section */}
       <Box 
         sx={{
-          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+          background: `linear-gradient(135deg, #0d1b5c 0%, #1a237e 50%, #303f9f 100%)`,
           color: 'white',
           py: { xs: 8, md: 15 },
           position: 'relative',
           overflow: 'hidden',
+          minHeight: '100vh',
+          display: 'flex',
+          alignItems: 'center',
           '&::before': {
             content: '""',
             position: 'absolute',
@@ -368,9 +446,66 @@ const LandingPage = () => {
             background: 'url("/images/pattern.png")',
             opacity: 0.05,
             zIndex: 0,
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '150px',
+            background: 'linear-gradient(to top, rgba(5, 15, 35, 0.95), transparent)',
+            zIndex: 1,
           }
         }}
       >
+        {/* Fondo de partículas */}
+        <Box sx={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          zIndex: 0,
+          opacity: 0.6
+        }}>
+          <ParticlesBackground />
+        </Box>
+
+        {/* Elementos flotantes decorativos */}
+        {[1, 2, 3, 4].map((item) => (
+          <motion.div
+            key={item}
+            style={{
+              position: 'absolute',
+              background: 'rgba(255, 255, 255, 0.1)',
+              backdropFilter: 'blur(5px)',
+              borderRadius: '50%',
+              zIndex: 0,
+            }}
+            animate={{
+              y: [0, 15, 0],
+              x: [0, 5, 0],
+            }}
+            transition={{
+              duration: 5 + Math.random() * 5,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              ease: 'easeInOut',
+              delay: item * 0.5
+            }}
+            sx={{
+              width: item % 2 === 0 ? '200px' : '300px',
+              height: item % 2 === 0 ? '200px' : '300px',
+              top: `${10 + item * 15}%`,
+              left: item % 2 === 0 ? '5%' : 'auto',
+              right: item % 2 !== 0 ? '5%' : 'auto',
+              filter: 'blur(40px)',
+              opacity: 0.2,
+            }}
+          />
+        ))}
+
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
           <Grid container spacing={6} alignItems="center">
             <Grid item xs={12} md={6}>
@@ -379,108 +514,208 @@ const LandingPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <Chip 
-                  label="Centro de Análisis de Datos y Supercómputo" 
-                  color="secondary" 
-                  sx={{ 
-                    mb: 2, 
-                    color: 'white', 
-                    fontWeight: 'bold',
-                    backdropFilter: 'blur(5px)',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    border: '1px solid rgba(255, 255, 255, 0.2)'
-                  }}
-                />
-                <Typography 
-                  variant="h2" 
-                  component="h1" 
-                  gutterBottom 
-                  sx={{ 
-                    fontWeight: 'bold', 
-                    mb: 3,
-                    fontSize: { xs: '2.2rem', sm: '2.8rem', md: '3.5rem' },
-                    lineHeight: 1.2,
-                    textShadow: '0 2px 10px rgba(0,0,0,0.1)'
-                  }}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2, duration: 0.6 }}
                 >
-                  Potencia tu investigación con <Box component="span" sx={{ color: 'secondary.main' }}>Leo Atrox</Box>
-                </Typography>
-                <Typography 
-                  variant="h6" 
-                  sx={{ 
-                    mb: 4, 
-                    opacity: 0.9, 
-                    maxWidth: '90%',
-                    fontSize: { xs: '1rem', md: '1.2rem' },
-                    lineHeight: 1.7
-                  }}
-                >
-                  Plataforma integral para la administración y seguimiento de proyectos de cómputo de alto rendimiento en la supercomputadora Leo Atrox de la UDG.
-                </Typography>
+                  <Chip 
+                    label="Centro de Análisis de Datos y Supercómputo" 
+                    color="secondary" 
+                    sx={{ 
+                      mb: 2, 
+                      color: 'white', 
+                      fontWeight: 'bold',
+                      backdropFilter: 'blur(10px)',
+                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      border: '1px solid rgba(255, 255, 255, 0.2)',
+                      boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                      '&:hover': {
+                        transform: 'translateY(-2px)',
+                        boxShadow: '0 6px 20px rgba(0, 0, 0, 0.2)'
+                      },
+                      transition: 'all 0.3s ease',
+                    }}
+                  />
+                </motion.div>
+
+                <Box sx={{ 
+                  backdropFilter: 'blur(12px)',
+                  backgroundColor: 'rgba(15, 23, 42, 0.7)',
+                  borderRadius: 4,
+                  p: 4,
+                  border: '1px solid rgba(99, 102, 241, 0.3)',
+                  boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.25)',
+                  mb: 4,
+                  background: 'linear-gradient(145deg, rgba(15, 23, 42, 0.8), rgba(30, 41, 59, 0.7))',
+                  '&:hover': {
+                    borderColor: 'rgba(99, 102, 241, 0.5)',
+                    boxShadow: '0 12px 40px 0 rgba(99, 102, 241, 0.15)',
+                  },
+                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                }}>
+                  <AnimatedTypingText 
+                    text={['Potencia tu investigación con Leo Atrox', 'Supercómputo al alcance de tu mano', 'Innovación en análisis de datos']}
+                    speed={50}
+                    variant="h2"
+                    color="#f8fafc"
+                    highlightColor="#60a5fa"
+                    highlightText={['Leo Atrox', 'Supercómputo', 'análisis de datos']}
+                    sx={{
+                      '& .highlight': {
+                        color: '#60a5fa',
+                        textShadow: '0 0 15px rgba(96, 165, 250, 0.7)',
+                        fontWeight: 700,
+                        position: 'relative',
+                        '&::after': {
+                          content: '""',
+                          position: 'absolute',
+                          bottom: '2px',
+                          left: 0,
+                          width: '100%',
+                          height: '4px',
+                          background: 'rgba(96, 165, 250, 0.3)',
+                          borderRadius: '2px',
+                        }
+                      },
+                      '& .typing-text': {
+                        textShadow: '0 2px 4px rgba(0,0,0,0.4)',
+                        fontWeight: 600,
+                        color: '#f8fafc',
+                      }
+                    }}
+                  />
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 0.6 }}
+                  >
+                    <Typography 
+                      variant="h6" 
+                      sx={{ 
+                        mt: 3,
+                        opacity: 0.95, 
+                        fontSize: { xs: '1.1rem', md: '1.3rem' },
+                        lineHeight: 1.8,
+                        fontWeight: 400,
+                        color: '#e2e8f0',
+                        textShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                      }}
+                    >
+                      Plataforma integral para la administración y seguimiento de proyectos de cómputo de alto rendimiento en la supercomputadora Leo Atrox de la UDG.
+                    </Typography>
+                  </motion.div>
+                </Box>
+
                 <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap', mt: 4 }}>
                   <AnimatedButton>
-                    <Button 
-                      variant="contained" 
-                      color="secondary" 
-                      size="large"
-                      endIcon={<LoginIcon />}
-                      onClick={() => navigate('/login')}
-                      sx={{ 
-                        px: 4,
-                        py: 1.5,
-                        fontWeight: 'bold',
-                        textTransform: 'none',
-                        borderRadius: 2,
-                        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)',
-                        fontSize: '1rem',
-                        '&:hover': {
-                          boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
-                          transform: 'translateY(-2px)',
-                        },
-                        transition: 'all 0.3s ease',
-                      }}
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      Iniciar Sesión
-                    </Button>
-                  </AnimatedButton>
-                  <AnimatedButton>
-                    <Button 
-                      variant="outlined" 
-                      color="secondary" 
-                      size="large"
-                      endIcon={<RegisterIcon />}
-                      onClick={() => navigate('/registro')}
-                      sx={{ 
-                        px: 4,
-                        py: 1.5,
-                        fontWeight: 'bold',
-                        textTransform: 'none',
-                        borderWidth: 2,
-                        borderRadius: 2,
-                        fontSize: '1rem',
-                        color: 'white',
-                        borderColor: 'rgba(255, 255, 255, 0.5)',
-                        '&:hover': {
-                          borderWidth: 2,
+                      <Button 
+                        variant="contained" 
+                        color="secondary" 
+                        size="large"
+                        endIcon={<LoginIcon />}
+                        onClick={() => navigate('/login')}
+                        sx={{ 
+                          px: 4,
+                          py: 1.5,
+                          fontWeight: 'bold',
+                          textTransform: 'none',
+                          borderRadius: 2,
+                          boxShadow: '0 4px 14px rgba(0, 0, 0, 0.2)',
+                          fontSize: '1rem',
+                          backdropFilter: 'blur(10px)',
                           backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                          borderColor: 'white',
-                        },
-                      }}
+                          '&:hover': {
+                            boxShadow: '0 6px 20px rgba(0, 0, 0, 0.3)',
+                            transform: 'translateY(-2px)',
+                            backgroundColor: 'secondary.main',
+                          },
+                          transition: 'all 0.3s ease',
+                        }}
+                      >
+                        Iniciar Sesión
+                      </Button>
+                    </motion.div>
+                  </AnimatedButton>
+                  
+                  <AnimatedButton>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
                     >
-                      Registrarse
-                    </Button>
+                      <Button 
+                        variant="outlined" 
+                        color="inherit" 
+                        size="large"
+                        endIcon={<RegisterIcon />}
+                        onClick={() => navigate('/registro')}
+                        sx={{ 
+                          px: 4,
+                          py: 1.5,
+                          fontWeight: 'bold',
+                          textTransform: 'none',
+                          borderWidth: 2,
+                          borderRadius: 2,
+                          fontSize: '1rem',
+                          color: 'white',
+                          borderColor: 'rgba(255, 255, 255, 0.3)',
+                          backdropFilter: 'blur(10px)',
+                          backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                          '&:hover': {
+                            borderWidth: 2,
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            borderColor: 'white',
+                            transform: 'translateY(-2px)',
+                            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
+                          },
+                          transition: 'all 0.3s ease',
+                        }}
+                      >
+                        Registrarse
+                      </Button>
+                    </motion.div>
                   </AnimatedButton>
                 </Box>
                 
-                {/* Trusted by section */}
-                <Box sx={{ mt: 6, opacity: 0.8 }}>
-                  <Typography variant="body2" sx={{ mb: 2, color: 'rgba(255, 255, 255, 0.8)' }}>
+                {/* Trusted by section - Simplified */}
+                <Box sx={{ mt: 6, mb: 4, textAlign: 'center' }}>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ 
+                      mb: 3, 
+                      color: '#94a3b8',
+                      fontWeight: 500,
+                      display: 'block'
+                    }}
+                  >
                     Confiado por investigadores de:
                   </Typography>
-                  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, alignItems: 'center' }}>
-                    <Box component="img" src="/images/udg-logo.png" alt="UDG" sx={{ height: 30, filter: 'brightness(0) invert(1)' }} />
-                    <Box component="img" src="/images/conacyt-logo.png" alt="CONACYT" sx={{ height: 25, filter: 'brightness(0) invert(1)' }} />
-                    <Box component="img" src="/images/red-mexsupe.png" alt="Red Mexsupe" sx={{ height: 25, filter: 'brightness(0) invert(1)' }} />
+                  <Box 
+                    sx={{ 
+                      display: 'flex', 
+                      flexWrap: 'wrap',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: { xs: 3, md: 4 },
+                      '& img': {
+                        height: { xs: 24, sm: 28 },
+                        opacity: 0.8,
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                          opacity: 1,
+                          transform: 'translateY(-2px)'
+                        }
+                      }
+                    }}
+                  >
+                    <img src="/images/udg-logo.png" alt="UDG" />
+                    <img src="/images/conacyt-logo.png" alt="CONACYT" />
+                    <img src="/images/red-mexsupe.png" alt="Red Mexsupe" />
                   </Box>
                 </Box>
               </motion.div>
@@ -490,16 +725,22 @@ const LandingPage = () => {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ 
-                  duration: 0.6,
-                  delay: 0.2
+                  duration: 0.8,
+                  delay: 0.4,
+                  type: 'spring',
+                  stiffness: 100,
+                  damping: 15
                 }}
                 whileHover={{ 
                   scale: 1.02,
                   transition: { duration: 0.3 }
                 }}
+                style={{
+                  position: 'relative',
+                  zIndex: 1
+                }}
               >
-                <Box 
-                  component="div"
+                <Box
                   sx={{
                     position: 'relative',
                     '&::before': {
@@ -508,36 +749,94 @@ const LandingPage = () => {
                       width: '100%',
                       height: '100%',
                       borderRadius: '20px',
-                      background: 'linear-gradient(45deg, rgba(25, 118, 210, 0.3), rgba(156, 39, 176, 0.3))',
-                      top: '15px',
-                      left: '15px',
-                      zIndex: 0,
-                      transition: 'all 0.3s ease',
+                      background: 'linear-gradient(45deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))',
+                      backdropFilter: 'blur(8px)',
+                      border: '1px solid rgba(255, 255, 255, 0.15)',
+                      zIndex: -1,
+                      top: 0,
+                      left: 0,
+                      transform: 'rotate(5deg)',
+                      boxShadow: '0 8px 32px 0 rgba(13, 18, 48, 0.3)'
+                    },
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      width: '100%',
+                      height: '100%',
+                      borderRadius: '20px',
+                      background: 'linear-gradient(45deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01))',
+                      backdropFilter: 'blur(8px)',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      zIndex: -2,
+                      top: 0,
+                      left: 0,
+                      transform: 'rotate(-5deg)',
+                      boxShadow: '0 8px 32px 0 rgba(13, 18, 48, 0.3)'
                     },
                     '&:hover::before': {
-                      top: '20px',
-                      left: '20px',
+                      transform: 'rotate(8deg) translateY(-5px)',
+                      transition: 'all 0.3s ease',
+                      background: 'linear-gradient(45deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04))'
+                    },
+                    '&:hover::after': {
+                      transform: 'rotate(-8deg) translateY(5px)',
+                      transition: 'all 0.3s ease',
+                      background: 'linear-gradient(45deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))'
+                    },
+                    '& .image-container': {
+                      position: 'relative',
+                      '&::before': {
+                        content: '""',
+                        position: 'absolute',
+                        width: '100%',
+                        height: '100%',
+                        borderRadius: '20px',
+                        background: 'linear-gradient(45deg, rgba(30, 60, 150, 0.2), rgba(80, 30, 120, 0.2))',
+                        top: '12px',
+                        left: '12px',
+                        zIndex: 0,
+                        transition: 'all 0.3s ease',
+                      },
+                      '&:hover::before': {
+                        top: '15px',
+                        left: '15px',
+                        background: 'linear-gradient(45deg, rgba(30, 80, 180, 0.25), rgba(90, 30, 150, 0.25))'
+                      }
                     }
                   }}
                 >
                   <Box 
-                    component="img"
-                    src="/images/leo-atrox-hero.png"
-                    alt="Supercomputadora Leo Atrox"
+                    className="image-container"
+                    component="div"
                     sx={{
                       position: 'relative',
-                      width: '100%',
-                      maxWidth: '600px',
-                      height: 'auto',
-                      borderRadius: 4,
-                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
-                      backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                      backdropFilter: 'blur(10px)',
-                      zIndex: 1,
-                      transition: 'all 0.3s ease',
+                      display: 'inline-block',
+                      '& img': {
+                        position: 'relative',
+                        width: '100%',
+                        maxWidth: '600px',
+                        height: 'auto',
+                        borderRadius: 3,
+                        boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.2)',
+                        border: '1px solid rgba(255, 255, 255, 0.12)',
+                        backgroundColor: 'rgba(26, 35, 126, 0.2)',
+                        backdropFilter: 'blur(12px)',
+                        zIndex: 1,
+                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                        transform: 'translateZ(0)',
+                        '&:hover': {
+                          transform: 'translateY(-8px) translateZ(0)',
+                          boxShadow: '0 30px 60px -10px rgba(0, 0, 0, 0.35)',
+                          borderColor: 'rgba(255, 255, 255, 0.2)'
+                        }
+                      }
                     }}
-                  />
+                  >
+                    <img
+                      src="/images/leo-atrox-hero.png"
+                      alt="Supercomputadora Leo Atrox"
+                    />
+                  </Box>
                 </Box>
               </motion.div>
             </Grid>
@@ -984,52 +1283,65 @@ const LandingPage = () => {
                     para impulsar la investigación de vanguardia y fomentar la colaboración interdisciplinaria.
                   </Typography>
                 </Box>
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 4 }}>
-                  <AnimatedButton>
-                    <Button 
-                      variant="contained" 
-                      color="primary" 
-                      size="large"
-                      onClick={() => window.open('https://www.cadsc.udg.mx', '_blank')}
-                      sx={{ 
-                        px: 4,
-                        py: 1.5,
-                        fontWeight: 'bold',
-                        textTransform: 'none',
-                        borderRadius: 2,
-                        boxShadow: '0 4px 14px rgba(25, 118, 210, 0.4)',
-                        '&:hover': {
-                          boxShadow: '0 6px 20px rgba(25, 118, 210, 0.5)',
-                          transform: 'translateY(-2px)',
-                        },
-                        transition: 'all 0.3s ease',
-                      }}
-                    >
-                      Conocer más sobre el CADS
-                    </Button>
+                <Box sx={{ display: 'flex', gap: 3, mt: 5, flexWrap: 'wrap' }}>
+                  <AnimatedButton
+                    variant="contained"
+                    color="secondary"
+                    size="large"
+                    startIcon={<HowToRegIcon sx={{ fontSize: '1.4rem' }} />}
+                    component={Link}
+                    to="/register"
+                    sx={{
+                      px: 6,
+                      py: 1.8,
+                      borderRadius: 3,
+                      fontWeight: 700,
+                      textTransform: 'none',
+                      fontSize: '1.2rem',
+                      boxShadow: '0 4px 15px rgba(59, 130, 246, 0.4)',
+                      background: 'linear-gradient(45deg, #3b82f6, #2563eb)',
+                      border: 'none',
+                      color: 'white',
+                      '&:hover': {
+                        transform: 'translateY(-3px)',
+                        boxShadow: '0 8px 25px rgba(37, 99, 235, 0.5)',
+                        background: 'linear-gradient(45deg, #2563eb, #1d4ed8)',
+                      },
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                    }}
+                  >
+                    Comenzar ahora
                   </AnimatedButton>
-                  <AnimatedButton>
-                    <Button 
-                      variant="outlined" 
-                      color="primary" 
-                      size="large"
-                      onClick={() => navigate('/registro')}
-                      sx={{ 
-                        px: 4,
-                        py: 1.5,
-                        fontWeight: 'bold',
-                        textTransform: 'none',
-                        borderRadius: 2,
-                        borderWidth: 2,
-                        '&:hover': {
-                          borderWidth: 2,
-                          backgroundColor: 'rgba(25, 118, 210, 0.04)',
-                        },
-                        transition: 'all 0.3s ease',
-                      }}
-                    >
-                      Empezar ahora
-                    </Button>
+                  <AnimatedButton
+                    variant="outlined"
+                    color="inherit"
+                    size="large"
+                    startIcon={<LoginIcon sx={{ fontSize: '1.4rem' }} />}
+                    component={Link}
+                    to="/login"
+                    sx={{
+                      px: 6,
+                      py: 1.8,
+                      borderRadius: 3,
+                      fontWeight: 600,
+                      textTransform: 'none',
+                      fontSize: '1.2rem',
+                      borderWidth: '2px',
+                      borderColor: 'rgba(96, 165, 250, 0.5)',
+                      color: '#e0f2fe',
+                      backgroundColor: 'rgba(30, 58, 138, 0.2)',
+                      backdropFilter: 'blur(8px)',
+                      '&:hover': {
+                        backgroundColor: 'rgba(30, 64, 175, 0.3)',
+                        transform: 'translateY(-3px)',
+                        boxShadow: '0 8px 25px rgba(37, 99, 235, 0.2)',
+                        borderColor: 'rgba(96, 165, 250, 0.8)',
+                        color: '#ffffff',
+                      },
+                      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                    }}
+                  >
+                    Iniciar sesión
                   </AnimatedButton>
                 </Box>
               </motion.div>
@@ -1159,64 +1471,36 @@ const LandingPage = () => {
         </Container>
       </Box>
 
-      {/* Footer */}
+      {/* Footer - Simplified */}
       <Box 
         component="footer" 
         sx={{ 
-          bgcolor: 'background.paper', 
-          pt: 8, 
-          pb: 4,
-          borderTop: `1px solid ${theme.palette.divider}`,
-          position: 'relative',
-          overflow: 'hidden',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '4px',
-            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-          }
+          bgcolor: '#0f172a',
+          color: '#e2e8f0',
+          py: 6,
+          borderTop: '1px solid rgba(255, 255, 255, 0.1)'
         }}
       >
         <Container maxWidth="lg">
           <Grid container spacing={4}>
             {/* Logo y descripción */}
-            <Grid item xs={12} md={4}>
-              <Box 
-                component={motion.div}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-              >
-                <Box display="flex" alignItems="center" mb={3}>
-                  <Box 
-                    component="img"
+            <Grid item xs={12} md={6}>
+              <Box mb={3}>
+                <Box display="flex" alignItems="center" mb={2}>
+                  <img
                     src="/images/logo-udg.png"
                     alt="UDG Logo"
-                    sx={{ 
-                      height: 50, 
-                      mr: 2,
-                      filter: 'grayscale(100%)',
-                      opacity: 0.8,
-                      transition: 'all 0.3s ease',
-                      '&:hover': {
-                        filter: 'grayscale(0%)',
-                        opacity: 1,
-                      }
+                    style={{ 
+                      height: 40, 
+                      marginRight: 12,
+                      filter: 'brightness(0) invert(1)'
                     }}
                   />
                   <Typography 
                     variant="h6" 
                     sx={{ 
                       fontWeight: 'bold',
-                      background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                      textFillColor: 'transparent',
+                      color: '#ffffff'
                     }}
                   >
                     CADS UDG
@@ -1224,458 +1508,176 @@ const LandingPage = () => {
                 </Box>
                 <Typography 
                   variant="body2" 
-                  color="text.secondary" 
                   sx={{ 
-                    lineHeight: 1.7,
-                    mb: 3,
-                    fontSize: '0.95rem'
+                    color: '#94a3b8',
+                    lineHeight: 1.6,
+                    fontSize: '0.9rem'
                   }}
                 >
-                  El Centro de Análisis de Datos y Supercómputo de la Universidad de Guadalajara provee infraestructura y servicios de cómputo de alto rendimiento para la investigación científica.
+                  Centro de Análisis de Datos y Supercómputo de la Universidad de Guadalajara.
+                  Proporcionando infraestructura de cómputo de alto rendimiento para la investigación científica.
                 </Typography>
-                <Box display="flex" gap={2}>
-                  {[
-                    { icon: <Facebook />, url: 'https://facebook.com', label: 'Facebook' },
-                    { icon: <Twitter />, url: 'https://twitter.com', label: 'Twitter' },
-                    { icon: <LinkedIn />, url: 'https://linkedin.com', label: 'LinkedIn' },
-                    { icon: <YouTube />, url: 'https://youtube.com', label: 'YouTube' },
-                  ].map((social, index) => (
-                    <motion.div
-                      key={index}
-                      whileHover={{ y: -3 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <IconButton 
-                        aria-label={social.label}
-                        sx={{ 
-                          color: 'text.secondary',
-                          backgroundColor: 'rgba(0, 0, 0, 0.03)',
-                          '&:hover': {
-                            color: theme.palette.primary.main,
-                            backgroundColor: 'rgba(25, 118, 210, 0.08)',
-                          },
-                          transition: 'all 0.3s ease',
-                        }}
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {social.icon}
-                      </IconButton>
-                    </motion.div>
-                  ))}
-                </Box>
+              </Box>
+              
+              <Box display="flex" gap={2}>
+                {[
+                  { icon: <Facebook />, url: 'https://facebook.com', label: 'Facebook' },
+                  { icon: <Twitter />, url: 'https://twitter.com', label: 'Twitter' },
+                  { icon: <LinkedIn />, url: 'https://linkedin.com', label: 'LinkedIn' },
+                  { icon: <YouTube />, url: 'https://youtube.com', label: 'YouTube' },
+                ].map((social, index) => (
+                  <IconButton 
+                    key={index}
+                    aria-label={social.label}
+                    sx={{ 
+                      color: '#94a3b8',
+                      '&:hover': {
+                        color: '#60a5fa',
+                        backgroundColor: 'rgba(96, 165, 250, 0.1)'
+                      }
+                    }}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {social.icon}
+                  </IconButton>
+                ))}
               </Box>
             </Grid>
             
             {/* Enlaces rápidos */}
-            <Grid item xs={12} sm={6} md={2}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
+            <Grid item xs={12} sm={6} md={3}>
+              <Box mb={4}>
                 <Typography 
                   variant="subtitle1" 
-                  fontWeight="bold" 
-                  gutterBottom
+                  component="h3"
                   sx={{ 
-                    color: theme.palette.text.primary,
+                    color: '#ffffff',
+                    fontWeight: 600,
+                    mb: 2,
+                    fontSize: '1rem',
                     position: 'relative',
                     display: 'inline-block',
                     '&::after': {
                       content: '""',
                       position: 'absolute',
-                      bottom: -5,
+                      bottom: -4,
                       left: 0,
-                      width: '40px',
-                      height: '3px',
-                      background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                      borderRadius: '3px',
+                      width: '24px',
+                      height: '2px',
+                      backgroundColor: '#60a5fa',
+                      borderRadius: '2px',
                     }
                   }}
                 >
                   Enlaces Rápidos
                 </Typography>
-                <List dense sx={{ mt: 2 }}>
+                <Box component="nav">
                   {[
-                    { text: 'Iniciar sesión', icon: <LoginIcon fontSize="small" sx={{ opacity: 0.7 }} />, action: () => navigate('/login') },
-                    { text: 'Registrarse', icon: <HowToRegIcon fontSize="small" sx={{ opacity: 0.7 }} />, action: () => navigate('/registro') },
-                    { text: 'Sitio web del CADS', icon: <SchoolIcon fontSize="small" sx={{ opacity: 0.7 }} />, action: () => window.open('https://www.cadsc.udg.mx', '_blank') },
-                    { text: 'Documentación', icon: <MenuBookOutlined fontSize="small" sx={{ opacity: 0.7 }} />, action: () => {} },
+                    { text: 'Iniciar sesión', action: () => navigate('/login') },
+                    { text: 'Registrarse', action: () => navigate('/registro') },
+                    { text: 'Sitio web del CADS', action: () => window.open('https://www.cadsc.udg.mx', '_blank') },
+                    { text: 'Documentación', action: () => {} },
                   ].map((item, index) => (
-                    <motion.div
+                    <Box 
                       key={item.text}
-                      whileHover={{ x: 5 }}
-                      transition={{ type: 'spring', stiffness: 300 }}
+                      onClick={item.action}
+                      sx={{
+                        color: '#94a3b8',
+                        fontSize: '0.9rem',
+                        py: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        '&:hover': {
+                          color: '#60a5fa',
+                          transform: 'translateX(4px)'
+                        },
+                        '&:not(:last-child)': {
+                          mb: 1
+                        }
+                      }}
                     >
-                      <ListItem 
-                        disableGutters 
-                        sx={{ 
-                          px: 0,
-                          '&:not(:last-child)': { 
-                            mb: 0.5 
-                          } 
-                        }}
-                      >
-                        <ListItemButton 
-                          onClick={item.action}
-                          sx={{
-                            px: 1,
-                            py: 0.5,
-                            borderRadius: 1,
-                            '&:hover': {
-                              backgroundColor: 'rgba(0, 0, 0, 0.03)',
-                              '& .MuiListItemIcon-root': {
-                                color: theme.palette.primary.main,
-                              },
-                              '& .MuiTypography-root': {
-                                color: theme.palette.primary.main,
-                              }
-                            }
-                          }}
-                        >
-                          <ListItemIcon sx={{ minWidth: 32, color: 'text.secondary' }}>
-                            {item.icon}
-                          </ListItemIcon>
-                          <ListItemText 
-                            primary={item.text}
-                            primaryTypographyProps={{ 
-                              variant: 'body2', 
-                              color: 'text.secondary',
-                              sx: { 
-                                fontWeight: 500,
-                                fontSize: '0.9rem',
-                                transition: 'all 0.2s ease',
-                              }
-                            }}
-                          />
-                        </ListItemButton>
-                      </ListItem>
-                    </motion.div>
+                      <ChevronRightIcon sx={{ fontSize: '1rem', mr: 1 }} />
+                      {item.text}
+                    </Box>
                   ))}
-                </List>
-              </motion.div>
+                </Box>
+              </Box>
             </Grid>
             
             {/* Contacto */}
             <Grid item xs={12} sm={6} md={3}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
+              <Box>
                 <Typography 
                   variant="subtitle1" 
-                  fontWeight="bold" 
-                  gutterBottom
+                  component="h3"
                   sx={{ 
-                    color: theme.palette.text.primary,
+                    color: '#ffffff',
+                    fontWeight: 600,
+                    mb: 2,
+                    fontSize: '1rem',
                     position: 'relative',
                     display: 'inline-block',
                     '&::after': {
                       content: '""',
                       position: 'absolute',
-                      bottom: -5,
+                      bottom: -4,
                       left: 0,
-                      width: '40px',
-                      height: '3px',
-                      background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                      borderRadius: '3px',
+                      width: '24px',
+                      height: '2px',
+                      backgroundColor: '#60a5fa',
+                      borderRadius: '2px',
                     }
                   }}
                 >
                   Contacto
                 </Typography>
-                <List dense sx={{ mt: 2 }}>
-                  <ListItem disableGutters sx={{ alignItems: 'flex-start', mb: 1.5 }}>
-                    <ListItemIcon sx={{ minWidth: 32, mt: 0.5, color: 'primary.main' }}>
-                      <EmailIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Correo electrónico"
-                      primaryTypographyProps={{ 
-                        variant: 'caption',
-                        color: 'text.secondary',
-                        sx: { fontWeight: 500 }
-                      }}
-                      secondary="contacto@cadsc.udg.mx"
-                      secondaryTypographyProps={{ 
-                        variant: 'body2',
-                        color: 'text.primary',
-                        sx: { 
-                          fontWeight: 500,
-                          fontSize: '0.9rem',
-                          mt: 0.5,
-                          display: 'block'
-                        }
-                      }}
-                    />
-                  </ListItem>
-                  
-                  <ListItem disableGutters sx={{ alignItems: 'flex-start', mb: 1.5 }}>
-                    <ListItemIcon sx={{ minWidth: 32, mt: 0.5, color: 'primary.main' }}>
-                      <PhoneIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Teléfono"
-                      primaryTypographyProps={{ 
-                        variant: 'caption',
-                        color: 'text.secondary',
-                        sx: { fontWeight: 500 }
-                      }}
-                      secondary="+52 33 1234 5678"
-                      secondaryTypographyProps={{ 
-                        variant: 'body2',
-                        color: 'text.primary',
-                        sx: { 
-                          fontWeight: 500,
-                          fontSize: '0.9rem',
-                          mt: 0.5,
-                          display: 'block'
-                        }
-                      }}
-                    />
-                  </ListItem>
-                  
-                  <ListItem disableGutters sx={{ alignItems: 'flex-start' }}>
-                    <ListItemIcon sx={{ minWidth: 32, mt: 0.5, color: 'primary.main' }}>
-                      <LocationIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText 
-                      primary="Dirección"
-                      primaryTypographyProps={{ 
-                        variant: 'caption',
-                        color: 'text.secondary',
-                        sx: { fontWeight: 500 }
-                      }}
-                      secondary="Av. Juárez 976, Edificio de Rectoría General, Planta Baja, Colonia Centro, 44100, Guadalajara, Jalisco, México."
-                      secondaryTypographyProps={{ 
-                        variant: 'body2',
-                        color: 'text.primary',
-                        sx: { 
-                          fontWeight: 500,
-                          fontSize: '0.9rem',
-                          mt: 0.5,
-                          display: 'block'
-                        }
-                      }}
-                    />
-                  </ListItem>
-                </List>
-              </motion.div>
-            </Grid>
-            
-            {/* Boletín informativo */}
-            <Grid item xs={12} md={3}>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <Typography 
-                  variant="subtitle1" 
-                  fontWeight="bold" 
-                  gutterBottom
-                  sx={{ 
-                    color: theme.palette.text.primary,
-                    position: 'relative',
-                    display: 'inline-block',
-                    '&::after': {
-                      content: '""',
-                      position: 'absolute',
-                      bottom: -5,
-                      left: 0,
-                      width: '40px',
-                      height: '3px',
-                      background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                      borderRadius: '3px',
-                    }
-                  }}
-                >
-                  Boletín Informativo
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary" 
-                  sx={{ 
-                    mt: 2,
-                    mb: 3,
-                    lineHeight: 1.7,
-                    fontSize: '0.95rem'
-                  }}
-                >
-                  Suscríbete para recibir las últimas noticias, actualizaciones y ofertas especiales directamente en tu bandeja de entrada.
-                </Typography>
-                <Box 
-                  component="form" 
-                  noValidate 
-                  autoComplete="off"
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      '& fieldset': {
-                        borderColor: theme.palette.divider,
-                      },
-                      '&:hover fieldset': {
-                        borderColor: `${theme.palette.primary.main} !important`,
-                      },
-                      '&.Mui-focused fieldset': {
-                        borderColor: `${theme.palette.primary.main} !important`,
-                      },
+                <Box>
+                  {[
+                    { 
+                      text: 'contacto@cadsc.udg.mx',
+                      icon: <EmailOutlined sx={{ fontSize: '1rem', color: '#60a5fa' }} />,
+                      action: 'mailto:contacto@cads.udg.mx'
                     },
-                  }}
-                >
-                  <TextField
-                    size="small"
-                    placeholder="Tu correo electrónico"
-                    variant="outlined"
-                    fullWidth
-                    sx={{ mb: 2 }}
-                    InputProps={{
-                      sx: {
-                        borderRadius: 2,
-                        backgroundColor: theme.palette.background.paper,
-                        '&:hover': {
-                          backgroundColor: theme.palette.action.hover,
-                        },
-                      },
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <EmailOutlined sx={{ color: 'text.secondary', opacity: 0.7 }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Button 
-                      variant="contained" 
-                      color="primary"
-                      fullWidth
-                      size="large"
+                    { 
+                      text: '+52 33 1234 5678',
+                      icon: <PhoneOutlined sx={{ fontSize: '1rem', color: '#60a5fa' }} />,
+                      action: 'tel:+523312345678'
+                    },
+                    { 
+                      text: 'Av. Juárez 976, Col. Centro, Guadalajara, Jalisco, México',
+                      icon: <LocationOnOutlined sx={{ fontSize: '1rem', color: '#60a5fa' }} />,
+                      action: 'https://goo.gl/maps/example'
+                    }
+                  ].map((item, index) => (
+                    <Box 
+                      key={index}
+                      component="a"
+                      href={item.action}
+                      target={item.action.startsWith('http') ? '_blank' : '_self'}
+                      rel="noopener noreferrer"
                       sx={{
-                        py: 1.2,
-                        borderRadius: 2,
-                        textTransform: 'none',
-                        fontWeight: 'bold',
-                        fontSize: '0.95rem',
-                        boxShadow: `0 4px 14px ${theme.palette.primary.main}40`,
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        mb: 2,
+                        textDecoration: 'none',
+                        color: '#94a3b8',
+                        transition: 'all 0.2s ease',
                         '&:hover': {
-                          boxShadow: `0 6px 20px ${theme.palette.primary.main}60`,
-                        },
-                        transition: 'all 0.3s ease',
+                          color: '#60a5fa'
+                        }
                       }}
                     >
-                      Suscribirse
-                    </Button>
-                  </motion.div>
+                      <Box sx={{ mr: 1.5, mt: '2px' }}>{item.icon}</Box>
+                      <Typography variant="body2" sx={{ fontSize: '0.9rem', lineHeight: 1.5 }}>
+                        {item.text}
+                      </Typography>
+                    </Box>
+                  ))}
                 </Box>
-              </motion.div>
-            </Grid>
-          </Grid>
-          
-          {/* Línea divisoria */}
-          <Divider 
-            sx={{ 
-              my: 6,
-              borderColor: 'divider',
-              position: 'relative',
-              '&::before, &::after': {
-                content: '""',
-                position: 'absolute',
-                top: '50%',
-                width: '20px',
-                height: '20px',
-                backgroundColor: theme.palette.background.paper,
-                borderRadius: '50%',
-                transform: 'translateY(-50%)',
-              },
-              '&::before': {
-                left: '-10px',
-                boxShadow: 'inset -5px 0 5px -5px rgba(0,0,0,0.1)',
-              },
-              '&::after': {
-                right: '-10px',
-                boxShadow: 'inset 5px 0 5px -5px rgba(0,0,0,0.1)',
-              },
-            }} 
-          />
-          
-          {/* Copyright y enlaces legales */}
-          <Grid 
-            container 
-            spacing={2} 
-            justifyContent="space-between" 
-            alignItems="center"
-            sx={{
-              [theme.breakpoints.down('sm')]: {
-                flexDirection: 'column-reverse',
-                alignItems: 'flex-start',
-                gap: 2,
-              }
-            }}
-          >
-            <Grid item>
-              <Typography 
-                variant="body2" 
-                color="text.secondary"
-                sx={{
-                  fontSize: '0.85rem',
-                  [theme.breakpoints.down('sm')]: {
-                    textAlign: 'left',
-                    width: '100%',
-                  }
-                }}
-              >
-                © {new Date().getFullYear()} Centro de Análisis de Datos y Supercómputo - UDG. Todos los derechos reservados.
-              </Typography>
-            </Grid>
-            <Grid item>
-              <Box 
-                display="flex" 
-                gap={3}
-                sx={{
-                  [theme.breakpoints.down('sm')]: {
-                    width: '100%',
-                    flexWrap: 'wrap',
-                    gap: 2,
-                  }
-                }}
-              >
-                {[
-                  { text: 'Términos y condiciones', url: '#' },
-                  { text: 'Política de privacidad', url: '#' },
-                  { text: 'Aviso legal', url: '#' },
-                  { text: 'Cookies', url: '#' },
-                ].map((item, index) => (
-                  <motion.div
-                    key={item.text}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <Link 
-                      href={item.url} 
-                      variant="body2" 
-                      color="text.secondary"
-                      underline="hover"
-                      sx={{
-                        fontSize: '0.85rem',
-                        fontWeight: 500,
-                        '&:hover': {
-                          color: theme.palette.primary.main,
-                        },
-                        transition: 'color 0.2s ease',
-                      }}
-                    >
-                      {item.text}
-                    </Link>
-                  </motion.div>
-                ))}
               </Box>
             </Grid>
           </Grid>
