@@ -5,6 +5,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
 
 // Pages
+import LandingPage from './pages/LandingPage';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
 import RegisterPage from './pages/RegisterPage';
@@ -77,6 +78,14 @@ function App() {
             <Routes>
               <Route 
                 path="/" 
+                element={
+                  <PublicRoute>
+                    <LandingPage />
+                  </PublicRoute>
+                } 
+              />
+              <Route 
+                path="/login" 
                 element={
                   <PublicRoute>
                     <HomePage />
